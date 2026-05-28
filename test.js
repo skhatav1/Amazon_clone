@@ -1,16 +1,39 @@
-let marks = prompt("Enter marks only from 0 - 100");
-let grade;
-if (marks>= 90 && marks <= 100){
-     grade = "A";
-} else if (marks>= 70 && marks <= 89){
-    grade = "B";
-} else if (marks>= 60 && marks <= 69){
-    grade = "C";
-} else if (marks>= 50 && marks <= 59){
-    grade = "D";
-} else if (marks>= 0 && marks <= 49){
-    grade = "F";
-} else {
-    alert("Enter a number between 0 - 100")
+const cartCount = document.querySelector("#cartCount");
+const toast = document.querySelector("#toast");
+const searchForm = document.querySelector("#searchForm");
+const searchInput = document.querySelector("#searchInput");
+const cartButtons = document.querySelectorAll(".add-cart");
+
+let cartTotal = 0;
+let toastTimer;
+
+function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2400);
 }
-console.log("Your grade is", grade);
+
+cartButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        cartTotal += 1;
+        cartCount.textContent = cartTotal;
+        showToast(`${button.dataset.product} added to cart`);
+    });
+});
+
+searchForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const query = searchInput.value.trim();
+
+    if (!query) {
+        showToast("Type a product or category to search");
+        searchInput.focus();
+        return;
+    }
+
+    showToast(`Showing results for "${query}"`);
+});
